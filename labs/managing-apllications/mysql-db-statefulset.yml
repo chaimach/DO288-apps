@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-db
+  labels:
+    app: mysql-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: mysql-db
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: mysql-db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          imagePullPolicy: "IfNotPresent"
+          envFrom:
+            - secretRef:
+                name: mysql-secret
+          env:   
+          - name: MYSQL_USER
+            value: dbuser   
+          - name: MYSQL_DATABASE
+            value: dbuser  
+          ports:
+            - name: mysql
+              containerPort: 3306
+          resources:
+            requests:
+              memory: 400Mi
+            limits:
+              memory: 400Mi
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql 
+            - name: init-db-volume
+              mountPath: /tmp/init-db
+      volumes:
+        - name: init-db-volume
+          configMap:
+            name: init-db-cm                 
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-persistent-storage
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "1Gi"
+            
+                      
