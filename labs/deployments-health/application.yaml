@@ -19,7 +19,7 @@ spec:
         deployment: expense
     spec:
       containers:
-      - image: quay.io/redhattraining/ocpdev-expense-service-health:4.12
+      - image: quay.io/redhattraining/ocpdev-expense-service-health:4.12-lab
         imagePullPolicy: Always
         name: expense
         ports:
@@ -27,9 +27,9 @@ spec:
           protocol: TCP
         resources:
           requests:
-            memory: "200Mi"
+            memory: "50Mi"
           limits:
-            memory: "200Mi"
+            memory: "50Mi"
 ---
 apiVersion: v1
 kind: Service
