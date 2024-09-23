@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-db
+  name: mysql-db-{cuid}
   labels:
-    app: mysql-db
+    app: mysql-db-{cuid}
 spec:
   selector:
     matchLabels:
-      app: mysql-db
+      app: mysql-db-{cuid}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: mysql-db
+        app: mysql-db-{cuid}
     spec:
       containers:
       - image: mysql:8.0
         name: mysql
         envFrom:
           - secretRef:
-              name: mysql-secret
+              name: mysql-secret-{cuid}
         env:   
         - name: MYSQL_USER
           value: dbuser   
@@ -29,11 +29,16 @@ spec:
         ports:
         - containerPort: 3306
           name: mysql
+        resources:
+          requests:
+            memory: 400Mi
+          limits:
+            memory: 400Mi  
         volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql
       volumes:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
-          claimName: mysql-pvc-claim
+          claimName: mysql-pvc-claim-{cuid}
          

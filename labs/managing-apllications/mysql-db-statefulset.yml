@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mysql-db
+  name: mysql-db-{cuid}
   labels:
-    app: mysql-db
+    app: mysql-db-{cuid}
 spec:
   replicas: 1
   selector:
     matchLabels: 
-      app: mysql-db
+      app: mysql-db-{cuid}
   updateStrategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app: mysql-db
+        app: mysql-db-{cuid}
     spec:
       containers:
         - name: mysql
@@ -22,7 +22,7 @@ spec:
           imagePullPolicy: "IfNotPresent"
           envFrom:
             - secretRef:
-                name: mysql-secret
+                name: mysql-secret-{cuid}
           env:   
           - name: MYSQL_USER
             value: dbuser   
@@ -37,17 +37,17 @@ spec:
             limits:
               memory: 400Mi
           volumeMounts:
-            - name: mysql-persistent-storage
+            - name: mysql-persistent-storage-{cuid}
               mountPath: /var/lib/mysql 
             - name: init-db-volume
               mountPath: /tmp/init-db
       volumes:
         - name: init-db-volume
           configMap:
-            name: init-db-cm                 
+            name: init-db-cm-{cuid}                 
   volumeClaimTemplates:
     - metadata:
-        name: mysql-persistent-storage
+        name: mysql-persistent-storage-{cuid}
       spec:
         accessModes:
           - "ReadWriteOnce"
