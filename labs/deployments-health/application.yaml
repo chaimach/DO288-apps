@@ -4,6 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app: expense-{cuid}
+    deployment: expense-{cuid}
     app.kubernetes.io/component: expense-{cuid}
     app.kubernetes.io/instance: expense-{cuid}
   name: expense-{cuid}
@@ -27,9 +28,9 @@ spec:
           protocol: TCP
         resources:
           requests:
-            memory: "50Mi"
+            memory: "100Mi"
           limits:
-            memory: "50Mi"
+            memory: "100Mi"
 ---
 apiVersion: v1
 kind: Service
@@ -53,6 +54,7 @@ kind: Route
 metadata:
   labels:
     app: expense-{cuid}
+    deployment: expense-{cuid}
     app.kubernetes.io/component: expense-{cuid}
     app.kubernetes.io/instance: expense-{cuid}
   name: expense-{cuid}
