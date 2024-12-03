@@ -1,4 +1,4 @@
-FROM registry.ocp4.example.com:8443/ubi8/nodejs-16 AS appbuild
+FROM docker.io/library/node:16 AS appbuild
 
 LABEL version="1.0"
 LABEL description="To Do List application builder"
@@ -8,23 +8,29 @@ ENV REACT_APP_API_HOST=""
 
 USER 0
 
-ADD . .
+COPY . /tmp/todo-frontend
 
-RUN chgrp -R 0 . && \
-  chmod -R g=u . && \
-  npm install --no-package-lock  && \
-  npm run build
-
+RUN cd /tmp/todo-frontend && \
+    npm cache clean --force && \
+    npm --loglevel verbose install --no-package-lock  && \
+    npm run build
 
 # https://github.com/sclorg/nginx-container
-FROM registry.ocp4.example.com:8443/ubi8/nginx-118
+FROM quay.io/sclorg/nginx-126-c10s
+
+WORKDIR /usr/share/nginx/html
+
 
 LABEL version="1.0"
 LABEL description="To Do List application front-end"
 LABEL creationDate="2017-12-25"
 LABEL updatedDate="2021-05-19"
 
-COPY nginx.conf /etc/nginx/
-COPY --from=appbuild /opt/app-root/src/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx
+	
+COPY --from=appbuild /tmp/todo-frontend/build /usr/share/nginx/html
 
-CMD nginx -g "daemon off;"
+EXPOSE 8080
+USER nginx
+
+CMD ["nginx", "-g", "daemon off;"]
