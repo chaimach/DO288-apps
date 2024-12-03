@@ -16,7 +16,7 @@ spec:
         app: mysql-db-{cuid}
     spec:
       containers:
-      - image: mysql:8.0
+      - image: dockerproxy.repos.tech.orange/mysql:8.0
         name: mysql
         envFrom:
           - secretRef:
