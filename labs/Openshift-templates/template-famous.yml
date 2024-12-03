@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: Famoud-mariadb-template
+  name: famous-mariadb-template
   annotations:
     description: "Template for a quotes application with a mariadb database."
     tags: "famousapp, mariadb, template"
@@ -14,7 +14,7 @@ parameters:
     value: quay.io/redhattraining/famous-quotes:2.1
   - name: Mariadb_IMAGE
     description: "Mariadb container image"
-    value: bitnami/mariadb:10.5.10-debian-10-r0
+    value:  dockerproxy.repos.tech.orange/bitnami/mariadb:10.5.10-debian-10-r0
   - name: QUOTES_USER
     description: "Quotes username for Mariadb"
     value: quotes
