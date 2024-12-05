@@ -30,7 +30,8 @@ COPY nginx.conf /etc/nginx
 	
 COPY --from=appbuild /tmp/todo-frontend/build /usr/share/nginx/html
 
-EXPOSE 8080
-USER nginx
+#ADD PORT EXPOSER
+
+#ADD USER
 
 CMD ["nginx", "-g", "daemon off;"]
