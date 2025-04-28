@@ -1,4 +1,4 @@
-FROM chaimabouz/training-project/library/node:16 AS appbuild
+FROM  quay.io/training-project/library/node:16 AS appbuild
 
 LABEL version="1.0"
 LABEL description="To Do List application builder"
